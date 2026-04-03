@@ -140,7 +140,11 @@ def main():
     args = parser.parse_args()
 
     # Generate logs if requested or if files don't exist
-    from config import SYSTEM_LOG_PATH, NETWORK_LOG_PATH
+    from config import SYSTEM_LOG_PATH, NETWORK_LOG_PATH, ALERTS_PATH
+    if args.gen and os.path.exists(ALERTS_PATH):
+        os.remove(ALERTS_PATH)
+        print(f"[*] Reset alert store → {ALERTS_PATH}")
+
     if args.gen or not os.path.exists(SYSTEM_LOG_PATH):
         print("[*] Generating synthetic logs …")
         from core.generate_logs import generate_system_logs, generate_network_logs

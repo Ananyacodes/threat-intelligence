@@ -37,7 +37,11 @@ def _build_cluster_matrix(alerts: pd.DataFrame) -> np.ndarray:
     cols = [c for c in CLUSTER_FEATURES if c in alerts.columns]
     if not cols:
         cols = [c for c in CLUSTER_FEATURES_NET if c in alerts.columns]
-    X = alerts[cols].fillna(0).values.astype(float)
+
+    # Alerts can come from multiple pipeline versions; coerce selected features
+    # to numeric so mixed-schema rows do not break clustering.
+    numeric_df = alerts[cols].apply(pd.to_numeric, errors="coerce").fillna(0)
+    X = numeric_df.values.astype(float)
     return X, cols
 
 

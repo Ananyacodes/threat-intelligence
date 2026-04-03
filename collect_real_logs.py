@@ -11,6 +11,9 @@ import pandas as pd
 
 from config import NETWORK_LOG_PATH, SYSTEM_LOG_PATH
 
+SYSTEM_LOG_PATH = Path(SYSTEM_LOG_PATH)
+NETWORK_LOG_PATH = Path(NETWORK_LOG_PATH)
+
 
 def _run_powershell(command: str) -> str:
     result = subprocess.run(
@@ -59,7 +62,19 @@ def collect_system_logs(minutes: int, max_events: int) -> pd.DataFrame:
 
     rows = _json_from_powershell(security_query)
     if rows:
-        return pd.DataFrame(rows)
+        df = pd.DataFrame(rows)
+        df["source_ip"] = df.get("ip", "unknown")
+        df["service"] = df.get("process_name", "unknown")
+        df["event"] = df.get("event_type", "other").astype(str).str.upper()
+        df["failed_count"] = (df["event"] == "LOGIN_FAILED").astype(int)
+        df["log_level"] = df["event"].map(
+            {"LOGIN_FAILED": "WARNING", "PROCESS_START": "INFO", "LOGIN_SUCCESS": "INFO"}
+        ).fillna("INFO")
+        out_cols = [
+            "timestamp", "source_ip", "user", "service",
+            "event", "failed_count", "log_level",
+        ]
+        return df[out_cols]
 
     # Fallback if Security log access is restricted.
     fallback_query = f"""
@@ -75,7 +90,23 @@ def collect_system_logs(minutes: int, max_events: int) -> pd.DataFrame:
       }}
     }} | ConvertTo-Json -Depth 4
     """
-    return pd.DataFrame(_json_from_powershell(fallback_query))
+    fallback_rows = _json_from_powershell(fallback_query)
+    if not fallback_rows:
+        return pd.DataFrame(
+            columns=["timestamp", "source_ip", "user", "service", "event", "failed_count", "log_level"]
+        )
+
+    df = pd.DataFrame(fallback_rows)
+    df["source_ip"] = df.get("ip", "unknown")
+    df["service"] = df.get("process_name", "unknown")
+    df["event"] = "PROCESS_START"
+    df["failed_count"] = 0
+    df["log_level"] = "INFO"
+    out_cols = [
+        "timestamp", "source_ip", "user", "service",
+        "event", "failed_count", "log_level",
+    ]
+    return df[out_cols]
 
 
 def collect_network_logs(duration_seconds: int, sample_interval: float) -> pd.DataFrame:
@@ -107,10 +138,12 @@ def collect_network_logs(duration_seconds: int, sample_interval: float) -> pd.Da
             samples.append(
                 {
                     "timestamp": ts,
-                    "src_ip": local_addr,
-                    "dst_ip": remote_addr,
-                    "dst_port": remote_port,
+                    "source_ip": local_addr,
+                    "destination_ip": remote_addr,
+                    "source_port": local_port,
+                    "destination_port": remote_port,
                     "protocol": "TCP",
+                    "duration_sec": sample_interval,
                 }
             )
 
@@ -118,18 +151,27 @@ def collect_network_logs(duration_seconds: int, sample_interval: float) -> pd.Da
 
     if not samples:
         return pd.DataFrame(
-            columns=["timestamp", "src_ip", "dst_ip", "dst_port", "protocol", "packets", "bytes_sent"]
+            columns=[
+                "timestamp", "source_ip", "destination_ip", "source_port",
+                "destination_port", "protocol", "bytes_sent", "bytes_received",
+                "duration_sec", "packet_count",
+            ]
         )
 
     df = pd.DataFrame(samples)
 
     # Convert repeated observed flows into packet/byte proxies usable by feature engineering.
     grouped = (
-        df.groupby(["timestamp", "src_ip", "dst_ip", "dst_port", "protocol"], as_index=False)
+        df.groupby(
+            ["timestamp", "source_ip", "destination_ip", "source_port", "destination_port", "protocol"],
+            as_index=False,
+        )
         .size()
-        .rename(columns={"size": "packets"})
+        .rename(columns={"size": "packet_count"})
     )
-    grouped["bytes_sent"] = grouped["packets"] * 1200
+    grouped["bytes_sent"] = grouped["packet_count"] * 1200
+    grouped["bytes_received"] = grouped["packet_count"] * 300
+    grouped["duration_sec"] = sample_interval
 
     return grouped
 
