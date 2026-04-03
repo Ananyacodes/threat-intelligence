@@ -1,7 +1,6 @@
 # AI Threat Intelligence System
 
 A full-stack AI-powered threat detection and intelligence platform.
-Covers **all 3 phases** and maps directly to your AI unit syllabus.
 
 ---
 
@@ -82,29 +81,6 @@ threat_intel_system/
 - **Random Forest** classifier to label attack types
 - **CVSS-style risk scoring** (0–10) per alert
 - Structured threat report with IOCs, campaign analysis, and prioritised recommendations
-
----
-
-## Viva Talking Points
-
-### Unit 1 — AI Techniques / Problem Solving
-> "We model the system as an **intelligent agent**: logs are percepts,
-> the anomaly detector is the reasoning engine, and alerts are actions.
-> Heuristic rules (failed login threshold, packet-rate threshold) encode
-> domain knowledge, while the ML models generalise beyond hardcoded rules."
-
-### Unit 2 — AI Models
-> "We use **unsupervised learning** (Isolation Forest, One-Class SVM) for anomaly
-> detection because attack patterns are unknown in advance. We use **supervised
-> learning** (Random Forest classifier) in Phase 3 once we have labelled data.
-> Clustering (K-Means, DBSCAN) groups related alerts into attack campaigns."
-
-### Unit 3 — Data Acquisition & Learning
-> "Raw logs are ingested from two sources — system events and network flows.
-> The preprocessor normalises timestamps, encodes categoricals, and imputes
-> missing values. Feature engineering adds rolling-window aggregations and
-> heuristic flags. Models train on this clean feature matrix and are persisted
-> to disk for reuse."
 
 ---
 
