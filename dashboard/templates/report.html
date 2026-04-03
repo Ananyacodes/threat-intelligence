@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Intelligence Report</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">⬡</span>
+    <span>ThreatIntel AI</span>
+  </div>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/report" class="active">Report</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="report-header">
+    <h1>Threat Intelligence Report</h1>
+    <p id="report-timestamp" class="muted"></p>
+  </div>
+
+  <!-- Executive Summary -->
+  <section class="report-section">
+    <h2>Executive Summary</h2>
+    <div class="stat-grid" id="exec-stats"></div>
+    <div class="attack-breakdown" id="attack-breakdown"></div>
+  </section>
+
+  <!-- IOCs -->
+  <section class="report-section">
+    <h2>Indicators of Compromise (IOCs)</h2>
+    <table id="ioc-table">
+      <thead>
+        <tr>
+          <th>IP Address</th>
+          <th>Event Count</th>
+          <th>Attack Types</th>
+        </tr>
+      </thead>
+      <tbody id="ioc-tbody"></tbody>
+    </table>
+  </section>
+
+  <!-- Attack Campaigns -->
+  <section class="report-section" id="campaigns-section">
+    <h2>Detected Attack Campaigns</h2>
+    <div id="campaigns-container"></div>
+  </section>
+
+  <!-- Recommendations -->
+  <section class="report-section">
+    <h2>Recommendations</h2>
+    <div id="recs-container"></div>
+  </section>
+
+  <!-- Top Alerts -->
+  <section class="report-section">
+    <h2>Top Alerts</h2>
+    <div class="table-wrap">
+      <table id="top-alerts-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>Attack</th>
+            <th>Severity</th>
+            <th>Risk Score</th>
+            <th>Risk Level</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="top-alerts-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script>
+async function loadReport() {
+  const r = await fetch("/api/report");
+  const data = await r.json();
+  if (data.error) {
+    document.querySelector(".container").innerHTML =
+      `<div class="error-box">${data.error}</div>`;
+    return;
+  }
+
+  document.getElementById("report-timestamp").textContent =
+    "Generated: " + (data.report_generated_at || "");
+
+  // Executive summary stats
+  const es = data.executive_summary || {};
+  const statsEl = document.getElementById("exec-stats");
+  const statItems = [
+    ["Total Alerts",   es.total_alerts       || 0, ""],
+    ["Critical",       es.critical_alerts    || 0, "critical"],
+    ["High",           es.high_alerts        || 0, "high"],
+    ["Unique IPs",     es.unique_attacker_ips|| 0, ""],
+  ];
+  statsEl.innerHTML = statItems.map(([l, v, cls]) =>
+    `<div class="stat-card ${cls}"><div class="stat-label">${l}</div>
+     <div class="stat-value">${v}</div></div>`
+  ).join("");
+
+  // Attack breakdown pills
+  const bd = es.attack_type_breakdown || {};
+  document.getElementById("attack-breakdown").innerHTML =
+    Object.entries(bd).map(([k, v]) =>
+      `<span class="pill">${k}: <strong>${v}</strong></span>`
+    ).join("");
+
+  // IOCs
+  const iocs = data.indicators_of_compromise || [];
+  document.getElementById("ioc-tbody").innerHTML = iocs.map(ioc =>
+    `<tr>
+      <td><code>${ioc.value}</code></td>
+      <td>${ioc.event_count}</td>
+      <td>${(ioc.attack_types||[]).map(a=>`<span class="badge">${a}</span>`).join(" ")}</td>
+    </tr>`
+  ).join("");
+
+  // Campaigns
+  const camps = data.attack_campaigns || [];
+  document.getElementById("campaigns-container").innerHTML = camps.length === 0
+    ? "<p class='muted'>No clusters detected. Run Phase 3 pipeline.</p>"
+    : camps.map(c => `
+        <div class="campaign-card">
+          <div class="campaign-header">
+            <span class="campaign-id">Cluster ${c.cluster_id}</span>
+            <span class="badge">${c.dominant_attack}</span>
+          </div>
+          <div class="campaign-meta">
+            <span>${c.event_count} events</span>
+            <span>${c.unique_ips} unique IPs</span>
+            <span>Avg severity: ${c.avg_severity}</span>
+            <span>${c.time_range}</span>
+          </div>
+        </div>`
+      ).join("");
+
+  // Recommendations
+  const recs = data.recommendations || [];
+  document.getElementById("recs-container").innerHTML = recs.map(r => `
+    <div class="rec-card priority-${r.priority.toLowerCase()}">
+      <span class="rec-priority">${r.priority}</span>
+      <div class="rec-body">
+        <strong>${r.action}</strong>
+        <p class="muted">${r.rationale}</p>
+      </div>
+    </div>`
+  ).join("");
+
+  // Top alerts table
+  const topAlerts = data.top_alerts || [];
+  document.getElementById("top-alerts-tbody").innerHTML = topAlerts.map(a => `
+    <tr>
+      <td><code>${a.source_ip || ""}</code></td>
+      <td><span class="badge">${a.attack_type || ""}</span></td>
+      <td>${a.severity || ""}</td>
+      <td>${a.risk_score !== undefined ? a.risk_score : ""}</td>
+      <td><span class="risk-${(a.risk_level||"").toLowerCase()}">${a.risk_level||""}</span></td>
+      <td class="small">${a.recommendation || ""}</td>
+    </tr>`
+  ).join("");
+}
+
+loadReport();
+</script>
+</body>
+</html>

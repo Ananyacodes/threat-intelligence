@@ -1,0 +1,304 @@
+timestamp,user,ip,event_type,process_name
+2026-04-01T00:30:50.1707979+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-04-01T00:25:37.2743795+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:25:37.2742989+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:15:28.9242717+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:15:19.4430015+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:15:19.4422465+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:06:13.3490765+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:06:13.3490274+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:06:06.8689278+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:06:06.8678449+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-04-01T00:05:08.7686640+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-04-01T00:03:53.0021469+05:30,system,unknown,process_start,Microsoft-Windows-WindowsUpdateClient
+2026-04-01T00:03:41.0058777+05:30,system,unknown,process_start,Microsoft-Windows-WindowsUpdateClient
+2026-04-01T00:03:41.0058722+05:30,system,unknown,process_start,Microsoft-Windows-WindowsUpdateClient
+2026-04-01T00:02:01.3750843+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:59:49.5721491+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:58:28.5323864+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:58:09.9505602+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:58:09.4038336+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:57:39.2433359+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:57:39.2413371+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:57:39.2403373+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:57:39.2363442+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:56:44.5085405+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:56:44.3008757+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:56:21.9652321+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:56:20.2401041+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:56:18.1854050+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:56:16.9969170+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:56:15.6432496+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:56:11.4835516+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:55:46.0642412+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:55:41.3572292+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:55:15.2122791+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:55:15.1839510+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:55:12.9758893+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:55:12.9419626+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:54:46.5880674+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:54:44.4369166+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:54:14.0802649+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:53:52.1270894+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:53:44.2972420+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:53:30.5350175+05:30,system,unknown,process_start,Microsoft-Windows-DNS-Client
+2026-03-31T23:53:16.7265947+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:53:16.6330089+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:53:16.0928789+05:30,system,unknown,process_start,TPM
+2026-03-31T23:53:13.8166968+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:13.4417911+05:30,system,unknown,process_start,Microsoft-Windows-Winlogon
+2026-03-31T23:53:12.0023638+05:30,system,unknown,process_start,Microsoft-Windows-WLAN-AutoConfig
+2026-03-31T23:53:11.9579980+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:11.8661985+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:53:08.9359962+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359858+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359794+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359738+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359667+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359610+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359564+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359502+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359277+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359198+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359137+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9359080+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9358982+05:30,system,unknown,process_start,Microsoft-Windows-HttpService
+2026-03-31T23:53:08.9350707+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:53:08.9337593+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:53:08.3480500+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3474539+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3470916+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3466981+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3464791+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3462690+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3253743+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.3253554+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:53:08.1900338+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:08.1900338+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:08.1900338+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:08.1900338+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:07.8860908+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:53:07.8857998+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T23:53:07.6508954+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:07.6428649+05:30,system,unknown,process_start,Win32k
+2026-03-31T23:53:07.5912988+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.5741492+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.5489776+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.5321779+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.5318476+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.5318279+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.4831490+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.4686434+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.4615484+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:53:07.4032379+05:30,system,unknown,process_start,Microsoft-Windows-DHCPv6-Client
+2026-03-31T23:53:07.3829670+05:30,system,unknown,process_start,Microsoft-Windows-Dhcp-Client
+2026-03-31T23:53:07.3827230+05:30,system,unknown,process_start,Microsoft-Windows-Dhcp-Client
+2026-03-31T23:53:07.3826242+05:30,system,unknown,process_start,Microsoft-Windows-Dhcp-Client
+2026-03-31T23:53:07.3271945+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:06.9591579+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:06.9082567+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:06.8693280+05:30,system,unknown,process_start,Microsoft-Windows-Directory-Services-SAM
+2026-03-31T23:53:06.8693240+05:30,system,unknown,process_start,Microsoft-Windows-Directory-Services-SAM
+2026-03-31T23:53:06.8621582+05:30,system,unknown,process_start,Microsoft-Windows-Directory-Services-SAM
+2026-03-31T23:53:06.7984571+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:53:06.6818167+05:30,system,unknown,process_start,LsaSrv
+2026-03-31T23:53:06.6404262+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.6382472+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.6377188+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:53:06.6369804+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:53:06.6332415+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.5588127+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.5574175+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.5574163+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:06.5573774+05:30,system,unknown,process_start,Microsoft-Windows-Wininit
+2026-03-31T23:53:04.5209379+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-PnP
+2026-03-31T23:53:04.5192537+05:30,system,unknown,process_start,Microsoft-Windows-DriverFrameworks-UserMode
+2026-03-31T23:53:02.0802050+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:53:01.9434227+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:53:01.9135154+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:01.9135154+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:01.9114951+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:01.9114951+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:53:01.9058957+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8657077+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8650737+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8644644+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8639494+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8633309+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8627392+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8621579+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8616888+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8611388+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8606653+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.8599974+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Processor-Power
+2026-03-31T23:53:01.0617839+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:53:01.0146141+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:58.7395882+05:30,system,unknown,process_start,Microsoft-Windows-Ntfs
+2026-03-31T23:52:58.7125671+05:30,system,unknown,process_start,Microsoft-Windows-Ntfs
+2026-03-31T23:52:58.5607867+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5607824+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5601864+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5601357+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5595697+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5595692+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5594630+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5594047+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5593603+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5593467+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5593373+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5593367+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5593212+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5592533+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.5583917+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-VmSwitch
+2026-03-31T23:52:58.4587287+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:58.4531536+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:58.4504243+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:52:58.4476218+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:58.4461192+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:52:58.3439076+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:58.1710234+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:52:58.1710234+05:30,system,unknown,process_start,VfpExt
+2026-03-31T23:52:57.9389349+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:57.9287470+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:57.8349331+05:30,system,unknown,process_start,Microsoft-Windows-Ntfs
+2026-03-31T23:52:57.1506204+05:30,system,unknown,process_start,Microsoft-Windows-Ntfs
+2026-03-31T23:52:56.2180203+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:56.2171821+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:56.2160946+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:56.2154834+05:30,system,unknown,process_start,Microsoft-Windows-FilterManager
+2026-03-31T23:52:55.8969758+05:30,system,unknown,process_start,Microsoft-Windows-HAL
+2026-03-31T23:52:55.8673875+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:55.8671517+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8671310+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:52:55.8646215+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-Hypervisor
+2026-03-31T23:52:55.8646212+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-Hypervisor
+2026-03-31T23:52:55.8646195+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-Hypervisor
+2026-03-31T23:52:55.8646165+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-Hypervisor
+2026-03-31T23:52:55.8646161+05:30,system,unknown,process_start,Microsoft-Windows-Hyper-V-Hypervisor
+2026-03-31T23:52:55.8578208+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8578204+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8577907+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:53:08.1482207+05:30,system,unknown,process_start,EventLog
+2026-03-31T23:53:08.1473681+05:30,system,unknown,process_start,EventLog
+2026-03-31T23:53:08.1472959+05:30,system,unknown,process_start,EventLog
+2026-03-31T23:53:08.1453527+05:30,system,unknown,process_start,EventLog
+2026-03-31T23:52:55.8577332+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8577210+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8576487+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8576329+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8576137+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Boot
+2026-03-31T23:52:55.8574697+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:52:55.8574692+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T23:51:44.8321075+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:42.8172124+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:26.5624168+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:25.5890800+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:25.5570765+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:19.2083579+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:51:19.2083579+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:51:11.7814217+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:50:42.5368726+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:50:39.5089104+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:50:09.1418166+05:30,system,unknown,process_start,Win32k
+2026-03-31T23:50:09.1418166+05:30,system,unknown,process_start,Win32k
+2026-03-31T23:50:05.8503209+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:50:05.1898748+05:30,system,unknown,process_start,Win32k
+2026-03-31T23:50:05.1898748+05:30,system,unknown,process_start,Win32k
+2026-03-31T23:49:08.8960916+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:48:53.5048438+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:48:50.4784080+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:48:48.4009659+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:48:41.3553242+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:48:40.1180682+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:48:16.7866417+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:48:06.7467699+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:45:03.8181146+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:44:26.6429967+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:44:26.6429967+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:43:55.6082014+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:43:12.4901703+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:43:12.4779460+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:43:01.5000397+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:42:03.6669180+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:41:07.4476322+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:40:03.8256045+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:38:25.4527325+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:38:25.4527325+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:38:25.4527325+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:38:22.1889271+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:38:22.1889271+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:38:20.8004052+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:38:20.8004052+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:38:20.8004052+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:38:17.5404789+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:38:17.5404789+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:35:03.8230579+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:33:21.3877756+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:33:03.4353753+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:31:00.3409779+05:30,system,unknown,process_start,Microsoft-Windows-Time-Service
+2026-03-31T23:28:35.2736406+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:28:35.2194117+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:28:18.7861299+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:17.5756851+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:17.5756851+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:28:15.3510489+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:15.3510489+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:28:14.1405404+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:14.1405404+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:28:12.9272022+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:12.9272022+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:28:10.7160883+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:28:10.7160883+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:23:06.7310272+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:06.7300689+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:06.4351552+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:23:01.5708421+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:01.5707714+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:01.5071442+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:23:01.3169852+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:23:01.2795808+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:01.2786296+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:01.2699047+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:23:01.2214971+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:23:01.2214971+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:22:57.4068243+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T23:20:34.8064638+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:15:34.8019408+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:13:56.3173941+05:30,system,unknown,process_start,Microsoft-Windows-Time-Service
+2026-03-31T23:13:53.5687939+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:13:40.9124332+05:30,system,unknown,process_start,Microsoft-Windows-DistributedCOM
+2026-03-31T23:13:24.6992895+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:13:24.6992895+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:10:34.7988757+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:09:53.3159010+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:09:53.0318410+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T23:08:24.7012674+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:08:24.7012674+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T23:05:33.7201741+05:30,system,unknown,process_start,Microsoft-Windows-Resource-Exhaustion-Detector
+2026-03-31T23:05:33.1074457+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:05:32.6124670+05:30,system,unknown,process_start,Application Popup
+2026-03-31T23:01:31.9955504+05:30,system,unknown,process_start,Microsoft-Windows-Configuration-Change-Monitor
+2026-03-31T22:57:06.8433132+05:30,system,unknown,process_start,Microsoft-Windows-IsolatedUserMode
+2026-03-31T22:56:52.4967596+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:56:52.4966970+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:56:52.2920135+05:30,system,unknown,process_start,Microsoft-Windows-Time-Service
+2026-03-31T22:54:01.2072870+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:52:43.5313768+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:52:43.5307178+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:47:19.6981237+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T22:47:18.5142153+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:47:18.5141426+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:44:07.3429301+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:43:17.9185151+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:43:17.9175662+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:42:36.6626242+05:30,system,unknown,process_start,Microsoft-Windows-Time-Service
+2026-03-31T22:42:36.6090386+05:30,system,unknown,process_start,Microsoft-Windows-Time-Service
+2026-03-31T22:40:47.4395295+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T22:38:29.1078958+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T22:38:27.1938182+05:30,system,unknown,process_start,Microsoft-Windows-TPM-WMI
+2026-03-31T22:38:26.0818323+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T22:38:19.7928895+05:30,system,unknown,process_start,Service Control Manager
+2026-03-31T22:38:18.3885846+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-General
+2026-03-31T22:38:14.8896740+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:38:14.8895310+05:30,system,unknown,process_start,Microsoft-Windows-Kernel-Power
+2026-03-31T22:20:04.9602840+05:30,system,unknown,process_start,Service Control Manager

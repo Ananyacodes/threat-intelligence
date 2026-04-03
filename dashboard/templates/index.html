@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Threat Intelligence Dashboard</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">⬡</span>
+    <span>ThreatIntel AI</span>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="active">Dashboard</a>
+    <a href="/report">Report</a>
+  </div>
+  <div class="nav-status">
+    <span class="pulse-dot"></span>
+    <span id="last-updated">Updating…</span>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- STAT CARDS -->
+  <section class="stat-grid">
+    <div class="stat-card" id="card-total">
+      <div class="stat-label">Total Alerts</div>
+      <div class="stat-value" id="stat-total">—</div>
+    </div>
+    <div class="stat-card critical" id="card-critical">
+      <div class="stat-label">Critical</div>
+      <div class="stat-value" id="stat-critical">—</div>
+    </div>
+    <div class="stat-card high" id="card-high">
+      <div class="stat-label">High</div>
+      <div class="stat-value" id="stat-high">—</div>
+    </div>
+    <div class="stat-card medium" id="card-medium">
+      <div class="stat-label">Medium</div>
+      <div class="stat-value" id="stat-medium">—</div>
+    </div>
+    <div class="stat-card low" id="card-low">
+      <div class="stat-label">Low</div>
+      <div class="stat-value" id="stat-low">—</div>
+    </div>
+  </section>
+
+  <!-- CHARTS ROW 1 -->
+  <section class="chart-grid">
+    <div class="chart-card wide">
+      <h3>Alert Timeline</h3>
+      <div id="chart-timeline"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Severity Distribution</h3>
+      <div id="chart-severity"></div>
+    </div>
+  </section>
+
+  <!-- CHARTS ROW 2 -->
+  <section class="chart-grid">
+    <div class="chart-card">
+      <h3>Attack Types</h3>
+      <div id="chart-attacks"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Top Attacker IPs</h3>
+      <div id="chart-ips"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Risk Score Distribution</h3>
+      <div id="chart-risk"></div>
+    </div>
+  </section>
+
+  <!-- HEATMAP -->
+  <section class="chart-grid">
+    <div class="chart-card full">
+      <h3>Attack Heatmap  <span class="sub">(day × hour)</span></h3>
+      <div id="chart-heatmap"></div>
+    </div>
+  </section>
+
+  <!-- ALERT TABLE -->
+  <section class="table-section">
+    <div class="table-header">
+      <h3>Recent Alerts</h3>
+      <button class="btn-run" onclick="runPipeline()">↺ Re-run Pipeline</button>
+    </div>
+    <div class="table-wrap">
+      <table id="alert-table">
+        <thead>
+          <tr>
+            <th>Detected</th>
+            <th>Source IP</th>
+            <th>Attack Type</th>
+            <th>Sev</th>
+            <th>Confidence</th>
+            <th>Risk</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody id="alert-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script src="/static/dashboard.js"></script>
+</body>
+</html>
