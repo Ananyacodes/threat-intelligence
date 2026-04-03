@@ -18,12 +18,12 @@ env/
 .env
 .env.*
 
-# OS/editor noise
-.DS_Store
-Thumbs.db
-.vscode/
-
 # Generated runtime artifacts
 data/*.csv
 data/*.json
 models/*.pkl
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/

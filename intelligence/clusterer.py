@@ -38,8 +38,8 @@ def _build_cluster_matrix(alerts: pd.DataFrame) -> np.ndarray:
     if not cols:
         cols = [c for c in CLUSTER_FEATURES_NET if c in alerts.columns]
 
-    # Alerts can come from multiple pipeline versions; coerce selected features
-    # to numeric so mixed-schema rows do not break clustering.
+    # Alerts can come from different pipeline versions; coerce to numeric to
+    # avoid crashes when old rows contain strings in feature columns.
     numeric_df = alerts[cols].apply(pd.to_numeric, errors="coerce").fillna(0)
     X = numeric_df.values.astype(float)
     return X, cols
@@ -80,22 +80,50 @@ class AttackClusterer:
         if "cluster_kmeans" not in alerts.columns:
             return pd.DataFrame()
 
+        alerts = alerts.copy()
+        for col in ["severity", "confidence"]:
+            if col in alerts.columns:
+                alerts[col] = pd.to_numeric(alerts[col], errors="coerce")
+        if "timestamp" in alerts.columns:
+            alerts["timestamp"] = pd.to_datetime(alerts["timestamp"], errors="coerce")
+
+        agg_spec = {
+            "count": ("attack_type", "count"),
+            "dominant_attack": ("attack_type", lambda x: x.mode().iloc[0] if not x.mode().empty else "unknown"),
+        }
+        if "severity" in alerts.columns:
+            agg_spec["avg_severity"] = ("severity", "mean")
+            agg_spec["max_severity"] = ("severity", "max")
+        if "confidence" in alerts.columns:
+            agg_spec["avg_confidence"] = ("confidence", "mean")
+        if "source_ip" in alerts.columns:
+            agg_spec["unique_ips"] = ("source_ip", "nunique")
+        if "timestamp" in alerts.columns:
+            agg_spec["start_time"] = ("timestamp", "min")
+            agg_spec["end_time"] = ("timestamp", "max")
+
         summary = (
             alerts.groupby("cluster_kmeans")
-            .agg(
-                count=("attack_type", "count"),
-                dominant_attack=("attack_type", lambda x: x.mode().iloc[0]),
-                avg_severity=("severity", "mean"),
-                max_severity=("severity", "max"),
-                avg_confidence=("confidence", "mean"),
-                unique_ips=("source_ip", "nunique"),
-                start_time=("timestamp", "min"),
-                end_time=("timestamp", "max"),
-            )
+            .agg(**agg_spec)
             .reset_index()
             .rename(columns={"cluster_kmeans": "cluster_id"})
-            .sort_values("avg_severity", ascending=False)
         )
+
+        if "avg_severity" not in summary.columns:
+            summary["avg_severity"] = 0
+        if "max_severity" not in summary.columns:
+            summary["max_severity"] = 0
+        if "avg_confidence" not in summary.columns:
+            summary["avg_confidence"] = 0
+        if "unique_ips" not in summary.columns:
+            summary["unique_ips"] = 0
+        if "start_time" not in summary.columns:
+            summary["start_time"] = pd.NaT
+        if "end_time" not in summary.columns:
+            summary["end_time"] = pd.NaT
+
+        summary = summary.sort_values("avg_severity", ascending=False)
+
         return summary
 
     def save(self):

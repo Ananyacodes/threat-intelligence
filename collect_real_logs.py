@@ -68,13 +68,10 @@ def collect_system_logs(minutes: int, max_events: int) -> pd.DataFrame:
         df["event"] = df.get("event_type", "other").astype(str).str.upper()
         df["failed_count"] = (df["event"] == "LOGIN_FAILED").astype(int)
         df["log_level"] = df["event"].map(
-            {"LOGIN_FAILED": "WARNING", "PROCESS_START": "INFO", "LOGIN_SUCCESS": "INFO"}
+            {"LOGIN_FAILED": "WARNING", "LOGIN_SUCCESS": "INFO", "PROCESS_START": "INFO"}
         ).fillna("INFO")
-        out_cols = [
-            "timestamp", "source_ip", "user", "service",
-            "event", "failed_count", "log_level",
-        ]
-        return df[out_cols]
+        cols = ["timestamp", "source_ip", "user", "service", "event", "failed_count", "log_level"]
+        return df[cols]
 
     # Fallback if Security log access is restricted.
     fallback_query = f"""
@@ -92,9 +89,9 @@ def collect_system_logs(minutes: int, max_events: int) -> pd.DataFrame:
     """
     fallback_rows = _json_from_powershell(fallback_query)
     if not fallback_rows:
-        return pd.DataFrame(
-            columns=["timestamp", "source_ip", "user", "service", "event", "failed_count", "log_level"]
-        )
+        return pd.DataFrame(columns=[
+            "timestamp", "source_ip", "user", "service", "event", "failed_count", "log_level"
+        ])
 
     df = pd.DataFrame(fallback_rows)
     df["source_ip"] = df.get("ip", "unknown")
@@ -102,11 +99,8 @@ def collect_system_logs(minutes: int, max_events: int) -> pd.DataFrame:
     df["event"] = "PROCESS_START"
     df["failed_count"] = 0
     df["log_level"] = "INFO"
-    out_cols = [
-        "timestamp", "source_ip", "user", "service",
-        "event", "failed_count", "log_level",
-    ]
-    return df[out_cols]
+    cols = ["timestamp", "source_ip", "user", "service", "event", "failed_count", "log_level"]
+    return df[cols]
 
 
 def collect_network_logs(duration_seconds: int, sample_interval: float) -> pd.DataFrame:

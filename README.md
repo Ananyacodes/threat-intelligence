@@ -84,6 +84,22 @@ threat_intel_system/
 
 ---
 
+## What Makes This Unique
+
+Most student security projects stop at anomaly detection. This system goes further by turning alerts into analyst-ready intelligence.
+
+- **Dual data mode**: supports both synthetic attack simulation and real Windows log collection.
+- **Detection-to-intelligence chain**: one run moves from anomaly detection to campaign clustering to risk-scored reporting.
+- **Explainable output**: every alert includes reason, severity, confidence, and mitigation advice.
+- **Operational view**: dashboard + API + JSON report make it usable for demos, viva, and portfolio review.
+- **Analyst-first design**: focuses on actionable prioritisation, not just model accuracy.
+
+### Signature Flow
+
+Raw logs → Feature engineering → Ensemble anomaly detection → Alert scoring → Attack clustering → Risk classification → Threat report.
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint | Description |

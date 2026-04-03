@@ -124,6 +124,12 @@ def api_report():
 @app.route("/api/run_pipeline", methods=["POST"])
 def api_run_pipeline():
     """Re-run the full detection pipeline on demand."""
+    api_token = os.getenv("THREATINTEL_API_TOKEN", "").strip()
+    if api_token:
+        provided = request.headers.get("X-API-Token", "").strip()
+        if provided != api_token:
+            return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
     try:
         import subprocess
         result = subprocess.run(
