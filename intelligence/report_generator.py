@@ -43,22 +43,46 @@ def generate_report(alerts: pd.DataFrame,
     high_count     = len(alerts[alerts.get("risk_level", pd.Series()) == "High"]) \
                      if "risk_level" in alerts.columns else 0
     attack_counts  = alerts["attack_type"].value_counts().to_dict()
-    top_attackers  = (alerts.groupby("source_ip")
-                            .size()
-                            .sort_values(ascending=False)
-                            .head(10)
-                            .to_dict())
-
+    
     # ── Indicators of Compromise (IOCs) ────────────────────────────────────────
-    iocs = []
-    for ip, count in top_attackers.items():
-        attacks = alerts[alerts["source_ip"] == ip]["attack_type"].unique().tolist()
-        iocs.append({
-            "type":        "ip_address",
-            "value":       ip,
-            "event_count": int(count),
-            "attack_types": attacks,
-        })
+    # Build IOCs from source IPs or fallback to event_type/service for local events
+    iocs_dict = {}
+    for _, row in alerts.iterrows():
+        # Determine IOC identifier: prefer source_ip, fallback to event_type or service
+        ioc_value = str(row.get("source_ip", "")).strip()
+        if not ioc_value or ioc_value.lower() in ("", "nan", "none", "unknown"):
+            # Fallback for local/firewall events: use event_type or service
+            ioc_value = str(row.get("event_type", row.get("service", "unknown"))).strip()
+            ioc_type = "event_signature"
+        else:
+            ioc_type = "ip_address"
+        
+        if ioc_value and ioc_value != "unknown":
+            if ioc_value not in iocs_dict:
+                iocs_dict[ioc_value] = {
+                    "type": ioc_type,
+                    "value": ioc_value,
+                    "event_count": 0,
+                    "attack_types": set(),
+                }
+            iocs_dict[ioc_value]["event_count"] += 1
+            attack_type = str(row.get("attack_type", "unknown")).strip()
+            if attack_type and attack_type != "unknown":
+                iocs_dict[ioc_value]["attack_types"].add(attack_type)
+    
+    # Convert to list, sorted by event count descending, top 10
+    iocs = [
+        {
+            "type": v["type"],
+            "value": v["value"],
+            "event_count": v["event_count"],
+            "attack_types": sorted(list(v["attack_types"])),
+        }
+        for v in sorted(iocs_dict.values(), key=lambda x: x["event_count"], reverse=True)[:10]
+    ]
+    
+    # Keep top_attackers for backward compatibility
+    top_attackers = {ioc["value"]: ioc["event_count"] for ioc in iocs}
 
     # ── Attack timeline ────────────────────────────────────────────────────────
     if "timestamp" in alerts.columns:
@@ -98,8 +122,8 @@ def generate_report(alerts: pd.DataFrame,
             "critical_alerts":   critical_count,
             "high_alerts":       high_count,
             "attack_type_breakdown": attack_counts,
-            "unique_attacker_ips": alerts["source_ip"].nunique(),
-            "observation_window": {
+        "unique_sources": len(iocs),
+        "observation_window": {
                 "start": str(alerts["timestamp"].min()) if "timestamp" in alerts.columns else "N/A",
                 "end":   str(alerts["timestamp"].max()) if "timestamp" in alerts.columns else "N/A",
             },
