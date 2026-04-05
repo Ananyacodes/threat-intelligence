@@ -29,7 +29,7 @@ CLUSTER_FEATURES = [
 
 CLUSTER_FEATURES_NET = [
     "anomaly_score", "severity", "confidence",
-    "hour", "bytes_sent", "pps",
+    "hour", "connection_observation_count", "connection_observation_rate",
 ]
 
 
@@ -85,7 +85,7 @@ class AttackClusterer:
             if col in alerts.columns:
                 alerts[col] = pd.to_numeric(alerts[col], errors="coerce")
         if "timestamp" in alerts.columns:
-            alerts["timestamp"] = pd.to_datetime(alerts["timestamp"], errors="coerce")
+            alerts["timestamp"] = pd.to_datetime(alerts["timestamp"], errors="coerce", utc=True)
 
         agg_spec = {
             "count": ("attack_type", "count"),

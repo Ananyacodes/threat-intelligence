@@ -7,8 +7,7 @@ Charts:
   2. severity_donut      — distribution of severity levels
   3. attack_type_bar     — top attack types by frequency
   4. top_ips_bar         — top attacker IPs
-  5. heatmap             — alerts by hour-of-day × day-of-week
-  6. risk_score_hist     — distribution of risk scores (Phase 3)
+    5. risk_score_hist     — distribution of risk scores (Phase 3)
 """
 
 import json
@@ -17,6 +16,7 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.utils import PlotlyJSONEncoder
+import plotly.io as pio
 
 
 COLORS = {
@@ -34,19 +34,33 @@ ATTACK_COLORS = [
 
 
 def _fig_to_json(fig) -> str:
-    return json.dumps(fig, cls=PlotlyJSONEncoder)
+    return pio.to_json(fig, validate=False, pretty=False, remove_uids=True, engine="json")
+
+
+def _dashboard_time_col(df: pd.DataFrame) -> str | None:
+    """Prefer event timestamp; fall back to detection timestamp."""
+    if "timestamp" in df.columns:
+        return "timestamp"
+    if "detected_at" in df.columns:
+        return "detected_at"
+    return None
 
 
 # ── 1. Alerts timeline ─────────────────────────────────────────────────────────
 def alerts_timeline(alerts: pd.DataFrame) -> str:
-    if alerts.empty or "detected_at" not in alerts.columns:
+    if alerts.empty:
         return _empty_chart("No alert timeline data")
 
     df = alerts.copy()
-    df["detected_at"] = pd.to_datetime(df["detected_at"], errors="coerce")
-    df = df.dropna(subset=["detected_at"])
-    df = df.set_index("detected_at").resample("1h").size().reset_index()
+    ts_col = _dashboard_time_col(df)
+    if ts_col is None:
+        return _empty_chart("No alert timeline data")
+
+    df[ts_col] = pd.to_datetime(df[ts_col], errors="coerce", utc=True)
+    df = df.dropna(subset=[ts_col])
+    df = df.set_index(ts_col).resample("1h").size().reset_index()
     df.columns = ["time", "count"]
+    df["count"] = pd.to_numeric(df["count"], errors="coerce").fillna(0)
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -59,8 +73,16 @@ def alerts_timeline(alerts: pd.DataFrame) -> str:
         name="Alerts/hour",
     ))
     fig.update_layout(**_base_layout("Alerts Over Time"))
-    fig.update_xaxes(title="Time")
+    fig.update_xaxes(title="Time", type="date", tickformat="%b %d %H:%M")
     fig.update_yaxes(title="Alert Count")
+
+    # When only one bucket exists, pad ranges so the chart does not collapse.
+    if len(df) == 1:
+        center = pd.to_datetime(df.loc[0, "time"], utc=True)
+        fig.update_xaxes(range=[center - pd.Timedelta(minutes=30), center + pd.Timedelta(minutes=30)])
+        ymax = max(1.0, float(df.loc[0, "count"]) + 1.0)
+        fig.update_yaxes(range=[0, ymax])
+
     return _fig_to_json(fig)
 
 
@@ -96,10 +118,11 @@ def attack_type_bar(alerts: pd.DataFrame) -> str:
               .value_counts()
               .reset_index()
               .rename(columns={"attack_type": "type", "count": "count"}))
+    counts["count"] = pd.to_numeric(counts["count"], errors="coerce").fillna(0)
 
     fig = go.Figure(go.Bar(
-        x=counts["count"],
-        y=counts["type"],
+        x=counts["count"].tolist(),
+        y=counts["type"].tolist(),
         orientation="h",
         marker=dict(
             color=ATTACK_COLORS[:len(counts)],
@@ -108,31 +131,54 @@ def attack_type_bar(alerts: pd.DataFrame) -> str:
         hovertemplate="%{y}: %{x} alerts<extra></extra>",
     ))
     fig.update_layout(**_base_layout("Attacks by Type"))
-    fig.update_xaxes(title="Count")
+    fig.update_xaxes(title="Count", type="linear")
     fig.update_yaxes(autorange="reversed")
     return _fig_to_json(fig)
 
 
 # ── 4. Top attacker IPs ────────────────────────────────────────────────────────
 def top_ips_bar(alerts: pd.DataFrame) -> str:
-    if alerts.empty or "source_ip" not in alerts.columns:
+    if alerts.empty:
         return _empty_chart("No IP data")
 
-    top = (alerts.groupby("source_ip")
+    df = alerts.copy()
+    if "source_ip" not in df.columns:
+        df["source_ip"] = ""
+    if "service" not in df.columns:
+        df["service"] = ""
+    if "log_type" not in df.columns:
+        df["log_type"] = ""
+
+    # Real fallback: if source_ip is unavailable for firewall/admin events,
+    # group by event provider so the panel still communicates source context.
+    df["source_label"] = df["source_ip"].fillna("").astype(str).str.strip()
+    df["source_label"] = df["source_label"].replace({"nan": "", "None": "", "none": "", "unknown": "", "-": ""})
+    empty_mask = df["source_label"] == ""
+    df.loc[empty_mask, "source_label"] = df.loc[empty_mask, "service"].fillna("").astype(str).str.strip()
+    empty_mask = df["source_label"] == ""
+    df.loc[empty_mask, "source_label"] = df.loc[empty_mask, "log_type"].fillna("").astype(str).str.strip()
+    df["source_label"] = df["source_label"].replace({"nan": "", "None": "", "none": "", "unknown": "", "-": ""})
+    df = df[df["source_label"] != ""].copy()
+
+    if df.empty:
+        return _empty_chart("No IP data")
+
+    top = (df.groupby("source_label")
                  .size()
                  .sort_values(ascending=False)
                  .head(10)
                  .reset_index(name="count"))
+    top["count"] = pd.to_numeric(top["count"], errors="coerce").fillna(0)
 
     fig = go.Figure(go.Bar(
-        x=top["count"],
-        y=top["source_ip"],
+        x=top["count"].tolist(),
+        y=top["source_label"].tolist(),
         orientation="h",
         marker=dict(color="#D85A30"),
         hovertemplate="%{y}: %{x} events<extra></extra>",
     ))
     fig.update_layout(**_base_layout("Top Attacker IPs"))
-    fig.update_xaxes(title="Alert Count")
+    fig.update_xaxes(title="Alert Count", type="linear")
     fig.update_yaxes(autorange="reversed")
     return _fig_to_json(fig)
 
@@ -142,29 +188,40 @@ def attack_heatmap(alerts: pd.DataFrame) -> str:
     if alerts.empty:
         return _empty_chart("No heatmap data")
 
-    df = alerts.copy()
-    ts_col = "detected_at" if "detected_at" in df.columns else "timestamp"
-    df[ts_col] = pd.to_datetime(df[ts_col], errors="coerce")
-    df = df.dropna(subset=[ts_col])
-    df["hour"] = df[ts_col].dt.hour
-    df["dow"]  = df[ts_col].dt.day_name()
+    try:
+        df = alerts.copy()
+        ts_col = _dashboard_time_col(df)
+        if ts_col is None:
+            return _empty_chart("No heatmap data")
 
-    days  = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-    pivot = (df.groupby(["dow","hour"])
-               .size()
-               .unstack(fill_value=0)
-               .reindex(days, fill_value=0))
+        # Use UTC parsing to avoid mixed-timezone dtype issues.
+        df[ts_col] = pd.to_datetime(df[ts_col], errors="coerce", utc=True)
+        df = df.dropna(subset=[ts_col])
+        if df.empty:
+            return _empty_chart("No heatmap data")
 
-    fig = go.Figure(go.Heatmap(
-        z=pivot.values,
-        x=list(pivot.columns),
-        y=list(pivot.index),
-        colorscale="Reds",
-        hovertemplate="Day: %{y}<br>Hour: %{x}:00<br>Alerts: %{z}<extra></extra>",
-    ))
-    fig.update_layout(**_base_layout("Alert Heatmap (Day × Hour)"))
-    fig.update_xaxes(title="Hour of day (0–23)")
-    return _fig_to_json(fig)
+        df["hour"] = df[ts_col].dt.hour
+        df["dow"] = df[ts_col].dt.day_name()
+
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        pivot = (
+            df.groupby(["dow", "hour"]).size().unstack(fill_value=0)
+            .reindex(index=days, fill_value=0)
+            .reindex(columns=list(range(24)), fill_value=0)
+        )
+
+        fig = go.Figure(go.Heatmap(
+            z=pivot.values,
+            x=list(pivot.columns),
+            y=list(pivot.index),
+            colorscale="Reds",
+            hovertemplate="Day: %{y}<br>Hour: %{x}:00<br>Alerts: %{z}<extra></extra>",
+        ))
+        fig.update_layout(**_base_layout("Alert Heatmap (Day × Hour)"))
+        fig.update_xaxes(title="Hour of day (0–23)")
+        return _fig_to_json(fig)
+    except Exception:
+        return _empty_chart("Heatmap unavailable")
 
 
 # ── 6. Risk score histogram ────────────────────────────────────────────────────
@@ -172,8 +229,14 @@ def risk_score_histogram(alerts: pd.DataFrame) -> str:
     if alerts.empty or "risk_score" not in alerts.columns:
         return _empty_chart("No risk score data — run Phase 3")
 
+    df = alerts.copy()
+    df["risk_score"] = pd.to_numeric(df["risk_score"], errors="coerce")
+    df = df.dropna(subset=["risk_score"])
+    if df.empty:
+        return _empty_chart("No risk score data — run Phase 3")
+
     fig = go.Figure(go.Histogram(
-        x=alerts["risk_score"],
+        x=df["risk_score"],
         nbinsx=20,
         marker=dict(color="#534AB7"),
         hovertemplate="Score: %{x}<br>Count: %{y}<extra></extra>",
@@ -183,7 +246,7 @@ def risk_score_histogram(alerts: pd.DataFrame) -> str:
     fig.add_vline(x=6.0, line_dash="dash", line_color=COLORS["High"],
                   annotation_text="High threshold")
     fig.update_layout(**_base_layout("Risk Score Distribution"))
-    fig.update_xaxes(title="Risk Score (0–10)")
+    fig.update_xaxes(title="Risk Score (0–10)", type="linear", range=[0, 10])
     fig.update_yaxes(title="Count")
     return _fig_to_json(fig)
 
@@ -217,6 +280,5 @@ def all_charts(alerts: pd.DataFrame) -> dict:
         "severity":    severity_donut(alerts),
         "attack_type": attack_type_bar(alerts),
         "top_ips":     top_ips_bar(alerts),
-        "heatmap":     attack_heatmap(alerts),
         "risk_hist":   risk_score_histogram(alerts),
     }

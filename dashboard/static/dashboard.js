@@ -39,6 +39,69 @@ const CHART_LAYOUT_PATCH = {
   yaxis:         { gridcolor: "#30363d", zerolinecolor: "#30363d" },
 };
 
+function decodePlotlyBinary(node) {
+  if (Array.isArray(node)) {
+    return node.map(decodePlotlyBinary);
+  }
+
+  if (!node || typeof node !== "object") {
+    return node;
+  }
+
+  const keys = Object.keys(node);
+  if (keys.includes("dtype") && keys.includes("bdata") && typeof node.bdata === "string") {
+    try {
+      const binary = atob(node.bdata);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+
+      const view = new DataView(bytes.buffer);
+      const out = [];
+      const dtype = String(node.dtype).toLowerCase();
+
+      let stride = 1;
+      let reader = (offset) => view.getInt8(offset);
+
+      if (dtype === "u1") {
+        reader = (offset) => view.getUint8(offset);
+      } else if (dtype === "i2") {
+        stride = 2;
+        reader = (offset) => view.getInt16(offset, true);
+      } else if (dtype === "u2") {
+        stride = 2;
+        reader = (offset) => view.getUint16(offset, true);
+      } else if (dtype === "i4") {
+        stride = 4;
+        reader = (offset) => view.getInt32(offset, true);
+      } else if (dtype === "u4") {
+        stride = 4;
+        reader = (offset) => view.getUint32(offset, true);
+      } else if (dtype === "f4") {
+        stride = 4;
+        reader = (offset) => view.getFloat32(offset, true);
+      } else if (dtype === "f8") {
+        stride = 8;
+        reader = (offset) => view.getFloat64(offset, true);
+      }
+
+      for (let offset = 0; offset + stride <= bytes.length; offset += stride) {
+        out.push(reader(offset));
+      }
+      return out;
+    } catch {
+      return node;
+    }
+  }
+
+  const result = {};
+  for (const [k, v] of Object.entries(node)) {
+    result[k] = decodePlotlyBinary(v);
+  }
+  return result;
+}
+
 async function loadCharts() {
   try {
     const res    = await fetch("/api/charts");
@@ -46,16 +109,34 @@ async function loadCharts() {
 
     const render = (id, json) => {
       if (!json) return;
-      const fig = JSON.parse(json);
-      fig.layout = { ...fig.layout, ...CHART_LAYOUT_PATCH };
-      Plotly.react(id, fig.data, fig.layout, { responsive: true, displayModeBar: false });
+      try {
+        const fig = decodePlotlyBinary(JSON.parse(json));
+        const baseLayout = fig.layout || {};
+        fig.layout = {
+          ...baseLayout,
+          ...CHART_LAYOUT_PATCH,
+          xaxis: { ...(baseLayout.xaxis || {}), ...(CHART_LAYOUT_PATCH.xaxis || {}) },
+          yaxis: { ...(baseLayout.yaxis || {}), ...(CHART_LAYOUT_PATCH.yaxis || {}) },
+        };
+
+        // Preserve semantic axis types per chart to avoid epoch-style rendering.
+        if (id === "chart-timeline") {
+          fig.layout.xaxis = { ...(fig.layout.xaxis || {}), type: "date" };
+        }
+        if (id === "chart-attacks" || id === "chart-ips" || id === "chart-risk") {
+          fig.layout.xaxis = { ...(fig.layout.xaxis || {}), type: "linear" };
+        }
+
+        Plotly.react(id, fig.data, fig.layout, { responsive: true, displayModeBar: false });
+      } catch (e) {
+        console.warn(`Chart render failed for ${id}:`, e);
+      }
     };
 
     render("chart-timeline",  charts.timeline);
     render("chart-severity",  charts.severity);
     render("chart-attacks",   charts.attack_type);
     render("chart-ips",       charts.top_ips);
-    render("chart-heatmap",   charts.heatmap);
     render("chart-risk",      charts.risk_hist);
   } catch (e) {
     console.warn("Charts fetch failed:", e);

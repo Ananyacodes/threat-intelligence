@@ -16,8 +16,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from config import (
     BRUTE_FORCE_FAILED_LOGINS,
     PORT_SCAN_UNIQUE_PORTS,
-    DOS_PACKETS_PER_SECOND,
-    EXFIL_BYTES_THRESHOLD,
+    DOS_CONNECTION_OBSERVATIONS,
+    EXFIL_CONNECTION_OBSERVATIONS,
 )
 
 # ── Rolling-window aggregations ────────────────────────────────────────────────
@@ -115,21 +115,33 @@ def system_feature_matrix(df: pd.DataFrame) -> np.ndarray:
 # ══════════════════════════════════════════════════════════════════════════════
 
 NETWORK_FEATURE_COLS = [
-    "bytes_sent",
-    "bytes_received",
-    "bytes_ratio",
     "duration_sec",
-    "packet_count",
-    "pps",
+    "connection_observation_count",
+    "connection_observation_rate",
+    "log_type_code",
+    "event_id",
+    "event_type_code",
+    "event_message_length",
     "protocol_code",
+    "source_port",
     "destination_port",
     "is_well_known_port",
     "is_external_src",
+    "is_external_dst",
+    "has_source_ip",
+    "has_destination_ip",
+    "has_source_port",
+    "has_destination_port",
+    "has_protocol",
+    "is_firewall_event",
+    "is_dns_event",
+    "is_security_event",
     "hour",
     "is_night",
     "heuristic_port_scan",
     "heuristic_dos",
     "heuristic_exfil",
+    "heuristic_firewall_activity",
 ]
 
 
@@ -154,16 +166,24 @@ def network_features(df: pd.DataFrame) -> pd.DataFrame:
 
     # Heuristic flags
     df["heuristic_port_scan"] = (
-        df["ip_unique_dst_ports"] >= PORT_SCAN_UNIQUE_PORTS
+        (df["ip_unique_dst_ports"] >= PORT_SCAN_UNIQUE_PORTS) &
+        (df.get("has_destination_port", 0) == 1)
     ).astype(int)
 
     df["heuristic_dos"] = (
-        df["pps"] >= DOS_PACKETS_PER_SECOND
+        (df["connection_observation_count"] >= DOS_CONNECTION_OBSERVATIONS) &
+        ((df.get("has_destination_port", 0) == 1) | (df.get("has_destination_ip", 0) == 1) | (df.get("is_firewall_event", 0) == 1))
     ).astype(int)
 
     df["heuristic_exfil"] = (
-        (df["bytes_sent"]  >= EXFIL_BYTES_THRESHOLD) &
-        (df["bytes_ratio"] >= 10)   # sending much more than receiving
+        (df["is_external_dst"] == 1) &
+        (df["connection_observation_count"] >= EXFIL_CONNECTION_OBSERVATIONS) &
+        (df["duration_sec"] >= 60)
+    ).astype(int)
+
+    df["heuristic_firewall_activity"] = (
+        (df.get("is_firewall_event", 0) == 1) &
+        (df["connection_observation_count"] >= 2)
     ).astype(int)
 
     for col in NETWORK_FEATURE_COLS:

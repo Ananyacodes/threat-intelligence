@@ -31,8 +31,8 @@ ANOMALY_SCORE_THRESHOLD = 0.55
 # ── Heuristic Thresholds ───────────────────────────────────────────────────────
 BRUTE_FORCE_FAILED_LOGINS   = 5    # failed logins in window → brute force flag
 PORT_SCAN_UNIQUE_PORTS       = 10   # unique dst ports from one IP → scan flag
-DOS_PACKETS_PER_SECOND       = 500  # pps threshold → DoS flag
-EXFIL_BYTES_THRESHOLD        = 50_000  # bytes_sent in one flow → exfil flag
+DOS_CONNECTION_OBSERVATIONS  = 25   # repeated observations of same flow → DoS flag
+EXFIL_CONNECTION_OBSERVATIONS = 20  # sustained outbound flow observations → exfil flag
 
 # ── Severity Scoring ───────────────────────────────────────────────────────────
 # Each attack type maps to a base severity (1=low … 5=critical)
@@ -42,6 +42,7 @@ ATTACK_SEVERITY = {
     "port_scan":            2,
     "dos":                  5,
     "data_exfiltration":    5,
+    "firewall_activity":    3,
     "privilege_escalation": 4,
     "unknown_anomaly":      3,
 }
@@ -57,7 +58,5 @@ FLASK_PORT     = 5000
 FLASK_DEBUG    = True
 POLL_INTERVAL  = 5   # seconds between dashboard refreshes
 
-# ── Log Generation ────────────────────────────────────────────────────────────
-N_NORMAL_SYSTEM_LOGS  = 800
-N_NORMAL_NETWORK_LOGS = 900
-RANDOM_SEED           = 42
+# ── Reproducibility ───────────────────────────────────────────────────────────
+RANDOM_SEED = 42

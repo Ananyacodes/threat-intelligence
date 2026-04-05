@@ -2,8 +2,7 @@
 intelligence/classifier.py
 Phase 3 — supervised classifier that labels each alert with an attack type.
 
-Uses a Random Forest trained on the labelled synthetic data.
-In a real deployment you would train on labelled historical incidents.
+Uses a Random Forest trained on labels inferred from real collected alerts.
 
 Unit 2 justification:
   Supervised learning / classification model.
@@ -31,7 +30,7 @@ FEATURE_COLS = [
 
 FEATURE_COLS_NET = [
     "anomaly_score", "severity", "confidence",
-    "hour", "bytes_sent", "pps",
+    "hour", "connection_observation_count", "connection_observation_rate",
 ]
 
 

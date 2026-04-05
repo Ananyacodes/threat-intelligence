@@ -18,7 +18,9 @@ REPORT_PATH = os.path.join(DATA_DIR, "threat_report.json")
 
 
 def generate_report(alerts: pd.DataFrame,
-                    cluster_summary: pd.DataFrame = None) -> dict:
+                    cluster_summary: pd.DataFrame = None,
+                    triage_plan: dict | None = None,
+                    csp_plan: dict | None = None) -> dict:
     """
     Parameters
     ----------
@@ -60,7 +62,7 @@ def generate_report(alerts: pd.DataFrame,
 
     # ── Attack timeline ────────────────────────────────────────────────────────
     if "timestamp" in alerts.columns:
-        alerts["timestamp"] = pd.to_datetime(alerts["timestamp"], errors="coerce")
+        alerts["timestamp"] = pd.to_datetime(alerts["timestamp"], errors="coerce", utc=True)
         timeline = (alerts.dropna(subset=["timestamp"])
                           .set_index("timestamp")
                           .resample("1h")["attack_type"]
@@ -114,7 +116,9 @@ def generate_report(alerts: pd.DataFrame,
                     "description", "recommendation"]]
                   .fillna("")
                   .to_dict(orient="records")
-        ) if "risk_score" in alerts.columns else [],
+                ) if "risk_score" in alerts.columns else [],
+                "unit2_best_first_triage": triage_plan or {},
+                "unit3_csp_response_plan": csp_plan or {},
     }
 
     # Save to disk

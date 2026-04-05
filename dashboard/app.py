@@ -63,9 +63,11 @@ def api_alerts():
     if alerts.empty:
         return jsonify({"alerts": [], "total": 0})
     limit = int(request.args.get("limit", 100))
-    cols  = [c for c in ["detected_at","source_ip","attack_type","severity",
+    cols  = [c for c in ["detected_at","source_ip","destination_ip","destination_port","attack_type","severity",
                           "confidence","risk_score","risk_level","description",
-                          "recommendation","log_type"]
+                          "recommendation","log_type","data_origin",
+                          "event_type","event_id","event_message","log_level",
+                          "connection_observation_count","connection_observation_rate","duration_sec"]
              if c in alerts.columns]
     records = (alerts.sort_values("severity", ascending=False)
                      .head(limit)[cols]
@@ -88,6 +90,29 @@ def api_stats():
             return int((alerts["risk_level"] == level).sum())
         return 0
 
+    top_sources = {}
+    if not alerts.empty:
+        src = alerts.copy()
+        if "source_ip" not in src.columns:
+            src["source_ip"] = ""
+        if "service" not in src.columns:
+            src["service"] = ""
+        if "log_type" not in src.columns:
+            src["log_type"] = ""
+
+        src["source_label"] = src["source_ip"].fillna("").astype(str).str.strip()
+        src["source_label"] = src["source_label"].replace({"nan": "", "None": "", "none": "", "unknown": "", "-": ""})
+        empty_mask = src["source_label"] == ""
+        src.loc[empty_mask, "source_label"] = src.loc[empty_mask, "service"].fillna("").astype(str).str.strip()
+        empty_mask = src["source_label"] == ""
+        src.loc[empty_mask, "source_label"] = src.loc[empty_mask, "log_type"].fillna("").astype(str).str.strip()
+        src["source_label"] = src["source_label"].replace({"nan": "", "None": "", "none": "", "unknown": "", "-": ""})
+        src = src[src["source_label"] != ""].copy()
+        if not src.empty:
+            top_sources = (src.groupby("source_label").size()
+                             .sort_values(ascending=False)
+                             .head(5).to_dict())
+
     return jsonify({
         "total":         len(alerts),
         "critical":      _count("Critical"),
@@ -96,10 +121,7 @@ def api_stats():
         "low":           _count("Low"),
         "attack_types":  alerts["attack_type"].value_counts().to_dict()
                          if "attack_type" in alerts.columns else {},
-        "top_ips":       (alerts.groupby("source_ip").size()
-                                .sort_values(ascending=False)
-                                .head(5).to_dict())
-                         if "source_ip" in alerts.columns else {},
+        "top_ips":       top_sources,
     })
 
 

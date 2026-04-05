@@ -14,6 +14,7 @@ Final score = weighted sum, clamped to [0, 10].
 
 import pandas as pd
 import numpy as np
+import ipaddress
 import os
 import sys
 
@@ -51,7 +52,18 @@ def score_alerts(alerts: pd.DataFrame) -> pd.DataFrame:
     alerts["_conf_norm"]  = alerts["confidence"].clip(0, 100) / 100
 
     # External IP flag
-    alerts["_ext_flag"]   = alerts.get("is_external_ip", pd.Series(1, index=alerts.index)).fillna(1)
+    if "is_external_ip" in alerts.columns:
+        alerts["_ext_flag"] = pd.to_numeric(alerts["is_external_ip"], errors="coerce").fillna(0)
+    elif "source_ip" in alerts.columns:
+        def _is_external(ip_value) -> int:
+            try:
+                ip_obj = ipaddress.ip_address(str(ip_value))
+                return 0 if ip_obj.is_private else 1
+            except ValueError:
+                return 0
+        alerts["_ext_flag"] = alerts["source_ip"].apply(_is_external)
+    else:
+        alerts["_ext_flag"] = 0
 
     # Complexity
     alerts["_complexity"] = alerts["attack_type"].map(COMPLEXITY_MAP).fillna(0.7)
