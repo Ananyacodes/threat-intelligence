@@ -13,14 +13,16 @@ A full-stack AI-powered threat detection and intelligence platform using real Wi
 Set-Location "C:\Users\Ananya\OneDrive\threat-intel\threat_intel_system"
 
 # 2) Install dependencies (first time only)
-python.exe -m pip install -r requirements.txt
+& $PY -m pip install -r requirements.txt
 
 # 3) Run full pipeline (collect Windows logs → detect anomalies → generate intelligence report)
-python.exe main.py
+& $PY main.py
 
 # 4) Launch dashboard in a second PowerShell window
 powershell -ExecutionPolicy Bypass -File scripts\run_dashboard.ps1
 ```
+
+**Important:** start the dashboard from an elevated PowerShell window so it can read Windows event logs.
 
 **Then open your browser:**
 ```
@@ -37,16 +39,23 @@ Customize data collection and analysis with these command variations:
 
 ```powershell
 # Phase 1 only: collect logs and detect anomalies (skip intelligence/clustering)
-python.exe main.py --phase 1
+& $PY main.py --phase 1
 
 # Phase 3 only: run intelligence/clustering on existing alerts (skip collection)
-python.exe main.py --phase 3
+& $PY main.py --phase 3
 
 # Collect Windows logs from last N minutes (default is 180)
-python.exe main.py --real-minutes 90
+& $PY main.py --real-minutes 90
 
 # Limit maximum events collected (default is 8000)
-python.exe main.py --real-minutes 180 --real-max-events 5000
+& $PY main.py --real-minutes 180 --real-max-events 5000
+```
+
+**Run the dashboard from an elevated PowerShell window:**
+
+```powershell
+Set-Location "C:\Users\Ananya\OneDrive\threat-intel\threat_intel_system"
+powershell -ExecutionPolicy Bypass -File scripts\run_dashboard.ps1
 ```
 
 ---
@@ -85,11 +94,11 @@ threat_intel_system/
 
 | Command | Description |
 |---------|-------------|
-| `python.exe main.py` | Full pipeline: collect Windows logs → detect anomalies → clustering → intelligence report |
-| `python.exe main.py --phase 1` | Detection only: skip clustering and intelligence (Phase 1) |
-| `python.exe main.py --phase 3` | Intelligence only: run clustering/report using existing alerts (Phase 3, requires prior Phase 1 data) |
-| `python.exe main.py --real-minutes 90` | Collect logs from last 90 minutes (default 180) |
-| `python.exe main.py --real-max-events 5000` | Limit collection to 5000 events (default 8000) |
+| `& $PY main.py` | Full pipeline: collect Windows logs → detect anomalies → clustering → intelligence report |
+| `& $PY main.py --phase 1` | Detection only: skip clustering and intelligence (Phase 1) |
+| `& $PY main.py --phase 3` | Intelligence only: run clustering/report using existing alerts (Phase 3, requires prior Phase 1 data) |
+| `& $PY main.py --real-minutes 90` | Collect logs from last 90 minutes (default 180) |
+| `& $PY main.py --real-max-events 5000` | Limit collection to 5000 events (default 8000) |
 | `powershell -ExecutionPolicy Bypass -File scripts\run_dashboard.ps1` | Start Flask dashboard on http://localhost:5000 |
 
 ---
@@ -145,10 +154,10 @@ Remove-Item -Path data\system_logs.csv -Force -ErrorAction SilentlyContinue
 Remove-Item -Path data\network_logs.csv -Force -ErrorAction SilentlyContinue
 
 # Collect 3 hours of logs and run full analysis
-python.exe main.py --real-minutes 180
+& $PY main.py --real-minutes 180
 
 # Check alert count
-python.exe -c "import pandas as pd; df=pd.read_csv('data/alerts_store.csv'); print(f'Generated {len(df)} alerts'); print(f'Max severity: {df[\"severity\"].max()}')"
+& $PY -c "import pandas as pd; df=pd.read_csv('data/alerts_store.csv'); print(f'Generated {len(df)} alerts'); print(f'Max severity: {df[\"severity\"].max()}')"
 
 # Start dashboard
 powershell -ExecutionPolicy Bypass -File scripts\run_dashboard.ps1
@@ -156,14 +165,14 @@ powershell -ExecutionPolicy Bypass -File scripts\run_dashboard.ps1
 
 ### Workflow 2: Quick Test (5-10 minutes)
 ```powershell
-python.exe main.py --real-minutes 10
-python.exe -c "import pandas as pd; df=pd.read_csv('data/alerts_store.csv'); print(f'{len(df)} alerts found')"
+& $PY main.py --real-minutes 10
+& $PY -c "import pandas as pd; df=pd.read_csv('data/alerts_store.csv'); print(f'{len(df)} alerts found')"
 ```
 
 ### Workflow 3: Cluster Existing Alerts (Intelligence Only)
 ```powershell
 # Re-cluster and re-report without re-collecting logs
-python.exe main.py --phase 3
+& $PY main.py --phase 3
 ```
 
 Open `http://localhost:5000` to see live dashboard.
@@ -174,9 +183,9 @@ Open `http://localhost:5000` to see live dashboard.
 
 This is shell-backed collection with Python orchestration.
 
-- `scripts/collect_real_logs.ps1` collects Windows events and TCP samples directly in PowerShell.
-- System logs source: `Get-WinEvent`
-- Network logs source: `Get-NetTCPConnection`
+- `scripts/collect_real_logs.ps1` collects Windows events directly in PowerShell.
+- System logs source: Security log events from `Get-WinEvent`
+- Network logs source: Firewall and DNS operational event logs from `Get-WinEvent`
 - Results are normalized into:
 	- `data/system_logs.csv`
 	- `data/network_logs.csv`

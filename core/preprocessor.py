@@ -195,7 +195,8 @@ def preprocess_network_logs(path: str = None) -> pd.DataFrame:
     df["log_level"] = df["log_level"].fillna("INFORMATION").astype(str).str.strip().str.upper()
 
     if df.empty:
-        raise ValueError("Network log preprocessing produced 0 usable rows from real data.")
+        print("[preprocessor] No usable network rows after filtering; skipping network branch.")
+        return df
 
     df = _parse_timestamp(df)
 
